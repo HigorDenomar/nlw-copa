@@ -14,7 +14,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model poll {
+model Poll {
   id        String   @id @default(cuid())
   title     String
   code      String   @unique
@@ -33,7 +33,7 @@ model Participant {
 
   guesses Guess[]
   user    User    @relation(fields: [userId], references: [id])
-  poll    poll    @relation(fields: [pollId], references: [id])
+  poll    Poll    @relation(fields: [pollId], references: [id])
 
   @@unique([userId, pollId])
 }
@@ -47,7 +47,7 @@ model User {
   createdAt DateTime @default(now())
 
   participatingAt Participant[]
-  ownpolls        poll[]
+  ownpolls        Poll[]
 }
 
 model Game {
