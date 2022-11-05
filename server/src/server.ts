@@ -29,5 +29,5 @@ const PORT = 3333;
   await fastify.register(guessRoutes);
   await fastify.register(gameRoutes);
 
-  fastify.listen({ port: PORT });
+  fastify.listen({ port: PORT, host: '0.0.0.0' });
 })();
