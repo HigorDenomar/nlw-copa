@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import jwt from '@fastify/jwt';
 
 import { authRoutes } from './routes/auth';
 import { pollRoutes } from './routes/poll';
@@ -16,6 +17,10 @@ const PORT = 3333;
 
   await fastify.register(cors, {
     origin: true,
+  });
+
+  await fastify.register(jwt, {
+    secret: process.env.SECRET_KEY as string,
   });
 
   await fastify.register(authRoutes);
