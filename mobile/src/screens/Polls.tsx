@@ -51,7 +51,7 @@ export function Polls() {
 
       <VStack
         mt={6}
-        my={5}
+        mx={5}
         borderBottomWidth={1}
         borderBottomColor='gray.600'
         pb={4}

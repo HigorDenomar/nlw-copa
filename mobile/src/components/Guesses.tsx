@@ -43,6 +43,8 @@ export function Guesses({ pollId, code }: GuessesProps) {
   }
 
   async function handleGuessConfirm(gameId: string) {
+    console.log('GAME ID', gameId);
+
     try {
       if (!firstTeamPoints.trim() || !secondTeamPoints.trim()) {
         return toast.show({
@@ -52,7 +54,7 @@ export function Guesses({ pollId, code }: GuessesProps) {
         });
       }
 
-      await api.post(`pools/${pollId}/games/${gameId}/guesses`, {
+      await api.post(`polls/${pollId}/games/${gameId}/guesses`, {
         firstTeamPoints: Number(firstTeamPoints),
         secondTeamPoints: Number(secondTeamPoints),
       });
