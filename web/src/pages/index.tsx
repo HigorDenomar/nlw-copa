@@ -3,18 +3,27 @@ import Image from 'next/image';
 
 import appPreviewImg from '../assets/app-nlw-copa-preview.png';
 import logoImg from '../assets/logo.svg';
-import usersAvatarExampleImg from '../assets/users-avatar-example.png';
 import iconCheckImage from '../assets/icon-check.svg';
 import { api } from '../lib/axios';
 
+interface User {
+  id: string;
+  name: string;
+  avatarUrl: string;
+}
 interface HomeProps {
   pollCount: number;
   guessCount: number;
-  userCount: number;
+  usersData: {
+    count: number;
+    users: User[];
+  };
 }
 
 export default function Home(props: HomeProps) {
   const [pollTitle, setPollTitle] = useState('');
+
+  console.log(props.usersData);
 
   async function createPoll(event: FormEvent) {
     event.preventDefault();
@@ -49,11 +58,23 @@ export default function Home(props: HomeProps) {
         </h1>
 
         <div className='mt-10 flex items-center gap-2'>
-          <Image src={usersAvatarExampleImg} alt='' />
+          <div className='flex mr-7'>
+            {props.usersData.users.map(user => (
+              <Image
+                key={user.id}
+                src={user.avatarUrl}
+                alt={user.name}
+                title={user.name}
+                width={56}
+                height={56}
+                className='rounded-full border border-gray-900 border-4 mr-[-20px]'
+              />
+            ))}
+          </div>
 
           <strong className='text-gray-100 text-xl'>
-            <span className='text-green-500'>+{props.userCount}</span> pessoas
-            já estão usando
+            <span className='text-green-500'>+{props.usersData.count}</span>{' '}
+            pessoas já estão usando
           </strong>
         </div>
 
@@ -113,7 +134,7 @@ export default function Home(props: HomeProps) {
 }
 
 export const getServerSideProps = async () => {
-  const [pollCountResponse, guessCountResponse, userCountResponse] =
+  const [pollCountResponse, guessCountResponse, usersResponse] =
     await Promise.all([
       api.get('/polls/count'),
       api.get('/guesses/count'),
@@ -124,7 +145,7 @@ export const getServerSideProps = async () => {
     props: {
       pollCount: pollCountResponse.data.count,
       guessCount: guessCountResponse.data.count,
-      userCount: userCountResponse.data.count,
+      usersData: usersResponse.data,
     },
   };
 };
